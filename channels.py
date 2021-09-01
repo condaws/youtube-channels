@@ -2,8 +2,22 @@ from secrets import api_key
 from datetime import datetime
 from googleapiclient.discovery import build
 
+
 def valid_date(date_published):
+    '''
+    Reformat the datetime string returned from api call and check
+    if it is was uploaded within the last week.
+
+        Parameters:
+            date_published (str): unformatted datetime string returned from api
+                                  Ex. "2021-08-24T20:34:50Z"
+
+        Returns:
+            boolean: whether the vido was posted within the last week
+    '''
+
     clean_date = date_published[0:10].split('-')
+
 
     final_date = datetime(
         int(clean_date[0]),
@@ -13,10 +27,7 @@ def valid_date(date_published):
 
     elapsed_time = datetime.utcnow() - final_date
 
-    if elapsed_time.days > 6:
-        return False
-    else:
-        return True
+    return elapsed_time <= 6
 
 
 def get_videos():
